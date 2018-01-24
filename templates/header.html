@@ -1,0 +1,20 @@
+{% load staticfiles %}
+
+<div class="container">
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="http://www.zhouhy.com">
+                <img src="{% static '/images/tenlogo.png' %}" width="100px">
+            </a>
+        </div>
+        <div style="margin-right: 15px">
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'blog:blog_title' %}" >BLOG</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">LOGIN</a></li>
+            </ul>
+        </div>
+    </nav>
+
+</div>
