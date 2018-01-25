@@ -7,12 +7,17 @@
                 <img src="{% static '/images/tenlogo.png' %}" width="100px">
             </a>
         </div>
-        <div style="margin-right: 15px">
+        <div style="margin-right: 18px">
             <ul class="nav navbar-nav">
-                <li><a href="{% url 'blog:blog_title' %}" >BLOG</a></li>
+                <li><a href="{% url 'blog:blog_title' %}">BLOG</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">LOGIN</a></li>
+                {% if user.is_authenticated %}
+                    <li><a>Hello,{{ user.username }}.</a></li>
+                    <li><a href="{% url 'account:logout' %}">LOGOUT</a></li>
+                {% else %}
+                    <li><a href="{% url 'account:login' %}">LOGIN</a></li>
+                {% endif %}
             </ul>
         </div>
     </nav>
