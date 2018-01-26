@@ -7,5 +7,6 @@ app_name = 'account'
 
 urlpatterns = [
     url(r'^login/$', login, {'template_name': 'account/login.html'}, name='login'),
-    url(r'^logout/$', views.user_logout, name='logout')
+    url(r'^logout/$', views.user_logout, name='logout'),
+    url(r'^register/$', views.register, name='register'),
 ]
