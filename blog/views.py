@@ -5,7 +5,11 @@ from .models import BlogArticle
 
 
 def blog_title(request):
-    blogs = BlogArticle.objects.all()
+    querySet = request.GET.get('tag')
+    if querySet:
+        blogs = BlogArticle.objects.filter(tag=querySet)
+    else:
+        blogs = BlogArticle.objects.all()
     context = {'blogs': blogs}
     return render(request, 'blog/titles.html', context)
 

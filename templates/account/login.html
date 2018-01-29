@@ -1,15 +1,14 @@
 {% extends 'base.html' %}
-{% load staticfiles %}
 
 {% block content %}
 
     {% if form.errors %}
         <p>Your username and password didn't match. Please try again.</p>
     {% endif %}
-    <form class="form-signin" method="post" action="{% url 'account:login' %}">
+    <form class="form" method="post" action="{% url 'account:login' %}">
         {% csrf_token %}
         {#                        {{ form.as_p }}#}
-        <h2 class="form-signin-heading">Please sign in</h2>
+        <h2 class="form">Please sign in</h2>
         <div class="form-group">
 {#            <label for="username">用户名：</label>#}
             <input id="username" type="text" name="username" value="{{ username }}" class="form-control"
