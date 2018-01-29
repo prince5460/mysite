@@ -14,10 +14,10 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
                     <li><a >Hello,{{ user.username }}.</a></li>
-                    <li><a href="{% url 'account:logout' %}">LOGOUT</a></li>
+                    <li><a href="{% url 'account:user_logout' %}">LOGOUT</a></li>
                 {% else %}
-                    <li><a href="{% url 'account:register' %}">Register</a></li>
-                    <li><a href="{% url 'account:login' %}">LOGIN</a></li>
+                    <li><a href="{% url 'account:user_register' %}">Register</a></li>
+                    <li><a href="{% url 'account:user_login' %}">LOGIN</a></li>
                 {% endif %}
             </ul>
         </div>
