@@ -1,12 +1,15 @@
 from django.contrib.auth import logout, login, authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
 from django.urls import reverse
 
-from .forms import LoginForm, RegistrationForm, UserProfileForm
+from .models import UserProfile, UserInfo
+from .forms import LoginForm, RegistrationForm, UserProfileForm, UserForm, UserInfoForm
 
 
 def user_login(request):
@@ -34,21 +37,22 @@ def user_logout(request):
     return HttpResponseRedirect(reverse('blog:blog_title'))
 
 
-# def register(request):
-#     if request.method != 'POST':
-#         form = UserCreationForm()
-#     else:
-#         form = UserCreationForm(data=request.POST)
-#
-#         if form.is_valid():
-#             new_user = form.save()
-#             authenticated_user = authenticate(username=new_user.username,
-#                                               password=request.POST['password1'])
-#             login(request, authenticated_user)
-#             return HttpResponseRedirect(reverse('blog:blog_title'))
-#
-#     context = {'form': form}
-#     return render(request, 'account/register.html', context)
+def register2(request):
+    if request.method != 'POST':
+        form = UserCreationForm()
+    else:
+        form = UserCreationForm(data=request.POST)
+
+        if form.is_valid():
+            new_user = form.save()
+            authenticated_user = authenticate(username=new_user.username,
+                                              password=request.POST['password1'])
+            login(request, authenticated_user)
+            return HttpResponseRedirect(reverse('blog:blog_title'))
+
+    context = {'form': form}
+    return render(request, 'account/register.html', context)
+
 
 def register(request):
     if request.method == 'POST':
@@ -61,10 +65,60 @@ def register(request):
             new_profile = userprofile_form.save(commit=False)
             new_profile.user = new_user
             new_profile.save()
-            return HttpResponse('Successfully!')
+            UserInfo.objects.create(user=new_user)
+            # return HttpResponse('Successfully!')
+            return HttpResponseRedirect(reverse('blog:blog_title'))
         else:
             return HttpResponse('Sorry,you can not register.')
     else:
         user_form = RegistrationForm()
         userprofile_form = UserProfileForm()
         return render(request, 'account/register.html', {'form': user_form, 'profile': userprofile_form})
+
+
+@login_required(login_url='/account/login')
+def myself(request):
+    user = User.objects.get(username=request.user.username)
+    userprofile = UserProfile.objects.get(user=user)
+    userinfo = UserInfo.objects.get(user=user)
+
+    return render(request, 'account/myself.html', {'user': user, 'userinfo': userinfo, 'userprofile': userprofile})
+
+
+@login_required(login_url='/account/login')
+def myself_edit(request):
+    user = User.objects.get(username=request.user.username)
+    userprofile = UserProfile.objects.get(user=request.user)
+    userinfo = UserInfo.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        user_form = UserForm(request.POST)
+        userprofile_form = UserProfileForm(request.POST)
+        userinfo_form = UserInfoForm(request.POST)
+        if user_form.is_valid() * userprofile_form.is_valid() * userinfo_form.is_valid():
+            user_cd = user_form.cleaned_data
+            userprofile_cd = userprofile_form.cleaned_data
+            userinfo_cd = userinfo_form.cleaned_data
+            print(user_cd["email"])
+            user.email = user_cd['email']
+            userprofile.birth = userprofile_cd['birth']
+            userprofile.phone = userprofile_cd['phone']
+            userinfo.school = userinfo_cd['school']
+            userinfo.company = userinfo_cd['company']
+            userinfo.profession = userinfo_cd['profession']
+            userinfo.address = userinfo_cd['address']
+            userinfo.aboutme = userinfo_cd['aboutme']
+            user.save()
+            userprofile.save()
+            userinfo.save()
+
+        return HttpResponseRedirect('/account/my_information/')
+    else:
+        user_form = UserForm(instance=request.user)
+        userprofile_form = UserProfileForm(initial={'birth': userprofile.birth, 'phone': userprofile.phone})
+        userinfo_form = UserInfoForm(initial={'school': userinfo.school, 'company': userinfo.company,
+                                              'profession': userinfo.profession, 'address': userinfo.address,
+                                              'aboutme': userinfo.aboutme})
+        return render(request, 'account/myself_edit.html',
+                      {"user_form": user_form, "userprofile_form": userprofile_form,
+                       "userinfo_form": userinfo_form})

@@ -17,4 +17,7 @@ urlpatterns = [
     url(r'^password_change_done/$', auth_views.password_change_done,
         {'template_name': 'account/password_change_done.html'},
         name='password_change_done'),
+
+    url(r'^my_information/$', views.myself, name='my_information'),
+    url(r'^edit_my_information/$', views.myself_edit, name='edit_my_information'),
 ]
