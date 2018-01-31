@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load staticfiles %}
 {% block title %}my information{% endblock %}
 
 {% block content %}
@@ -48,8 +48,39 @@
                 </a>
             </div>
             <div class="col-md-6">
-                <p>Picture</p>
+                <div style="margin-right: 100px">
+                    {% if userinfo.photo %}
+                        <img src="{{ userinfo.photo | striptags }}" name="user_face" class="img-circle" width="200px"
+                             id="my_photo">
+                    {% else %}
+                        <img src="{% static 'images/avatar.png' %}" name="user_face" class="img-circle" width="200px"
+                             id="my_photo">
+                    {% endif %}
+                </div>
+                <div style="margin-right: 100px">
+                    <button class="btn btn-primary btn-lg" id="upload_image" onclick="upload_image_layer()">
+                        upload my photo
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-{% endblock %}
+
+
+{% endblock content %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{% static "js/jquery-3.2.1.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/layer.js" %}"></script>
+
+    <script>
+        function upload_image_layer() {
+            layer.open({
+                title: "上传头像",
+                area: ['650px', '600px'],
+                type: 2,
+                content: "{% url 'account:my_image' %}"
+            });
+        }
+    </script>
+{% endblock javascript %}
