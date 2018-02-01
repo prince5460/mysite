@@ -21,6 +21,8 @@
             <ul>
                 {% for blog in blogs %}
                     <li><a href="{{ blog.id }}">{{ blog.title }}</a></li>
+                {% empty %}
+                    <p>还没有发布文章</p>
                 {% endfor %}
             </ul>
         </div>
