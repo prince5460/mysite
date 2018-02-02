@@ -60,7 +60,7 @@ def del_article_column(request):
 @csrf_exempt
 def article_post(request):
     if request.method == 'POST':
-        article_post_form = ArticleColumnForm(data=request.POST)
+        article_post_form = ArticlePostForm(data=request.POST)
         if article_post_form.is_valid():
             cd = article_post_form.cleaned_data
             try:
