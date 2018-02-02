@@ -8,5 +8,7 @@ urlpatterns = [
     url(r'^rename_column/$', views.rename_article_column, name="rename_article_column"),
     url(r'^del_column/$', views.del_article_column, name="del_article_column"),
     url(r'^article_post/$', views.article_post, name="article_post"),
+    url(r'^article_list/$', views.article_list, name="article_list"),
+    url(r'^article_detail/(?P<id>\d+)/(?P<slug>[-\w]+)$', views.article_detail, name="article_detail"),
 
 ]
