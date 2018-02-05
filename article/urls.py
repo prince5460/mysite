@@ -10,5 +10,5 @@ urlpatterns = [
     url(r'^article_post/$', views.article_post, name="article_post"),
     url(r'^article_list/$', views.article_list, name="article_list"),
     url(r'^article_detail/(?P<id>\d+)/(?P<slug>[-\w]+)$', views.article_detail, name="article_detail"),
-
+    url(r'^del_article/$', views.del_article, name="del_article"),
 ]

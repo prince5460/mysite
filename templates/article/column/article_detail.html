@@ -6,8 +6,8 @@
 {% block content %}
     <div>
         <header>
-            <h1>{{ article.title }}</h1>
-            <p>{{ user.username }}</p>
+            <h1 class="text-center">{{ article.title }}</h1>
+            <p><span>{{ user.username }}</span><span style="margin-left: 20px">{{ article.created }}</span></p>
         </header>
         <link rel="stylesheet" href="{% static 'editor/css/editormd.preview.css' %}">
         <div id="editormd-view">
